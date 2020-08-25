@@ -26,9 +26,9 @@ err = NaN(nPoints,1);
 
 for i=1:nPoints
     
-    alpha1 = matchedAlpha1(i,:);
-    alpha2 = matchedAlpha2(i,:);
-    beta2 = (stereo360Params.R'*a2')';
+    alpha1 = matchedAlpha1(i,1:3);
+    alpha2 = matchedAlpha2(i,1:3);
+    beta2 = (stereo360Params.R'*alpha2')';
     
     % estimates optimal r1, r2 (see Ma 2015 for details)
     C = [alpha1' -beta2'];
@@ -38,7 +38,7 @@ for i=1:nPoints
     r2 = rr(2);
     
     P1 = r1*alpha1;
-    P2 = r2.*(R'*alpha2')' + stereo360Params.t(:)';
+    P2 = r2.*(stereo360Params.R'*alpha2')' + stereo360Params.t(:)';
     
     xyz(i,:) = (P1+P2)/2;
     err(i) = vecnorm(P1-P2);
@@ -50,4 +50,3 @@ end
 close(w)
 
 end
-
